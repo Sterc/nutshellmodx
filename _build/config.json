@@ -1,0 +1,29 @@
+{
+    "name": "NutshellModx",
+    "lowCaseName": "nutshellmodx",
+    "description": "Nutshell integration for MODX FormIt",
+    "author": "Joeke Kloosterman",
+    "version": "0.1.0",
+    "package":{
+        
+
+        "elements": {
+        
+            
+            
+            "snippets": [],
+            
+            
+        
+            
+            "chunks": [
+            
+            ]
+            
+        
+        },
+
+        "systemSettings": []
+    }
+    
+}
