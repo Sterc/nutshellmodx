@@ -101,8 +101,28 @@ if ($contactId) {
             }
         }
     }
-    echo $accountId;
-    print_r($getContact);
+    // Create the lead via the 'newLead' api call
+    $createLead = $nutshellmodx->callApi(
+        'newLead',
+        [
+            'lead' => [
+                'contacts' => [
+                    [
+                        'id' => $contactId
+                    ]
+                ],
+                'accounts' => [
+                    [
+                        'id' => $accountId
+                    ]
+                ],
+                'note' => [
+                     'Joeketestnote voor lead',
+                 ]
+            ]
+        ]
+    );
+    // print_r($getContact);
 }
 
 return true;
