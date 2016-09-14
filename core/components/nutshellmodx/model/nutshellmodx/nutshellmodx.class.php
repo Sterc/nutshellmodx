@@ -5,13 +5,16 @@
  *
  * @package nutshellmodx
  */
-class NutshellModx {
+class NutshellModx
+{
     public $modx = null;
     public $namespace = 'nutshellmodx';
     public $cache = null;
     public $options = array();
+    public $nutshellapi = null;
 
-    public function __construct(modX &$modx, array $options = array()) {
+    public function __construct(modX &$modx, array $options = array())
+    {
         $this->modx =& $modx;
         $this->namespace = $this->getOption('namespace', $options, 'nutshellmodx');
 
@@ -36,6 +39,36 @@ class NutshellModx {
 
         $this->modx->addPackage('nutshellmodx', $this->getOption('modelPath'));
         $this->modx->lexicon->load('nutshellmodx:default');
+
+        /* Load the Nutshell API */
+        $this->loadApi();
+    }
+
+    public function loadApi()
+    {
+        require_once($this->options['modelPath'].'nutshellapi/NutshellApi.php');
+        $username = $this->modx->getOption('nutshellmodx.username');
+        $apikey = $this->modx->getOption('nutshellmodx.apikey');
+        if ($username && $apikey) {
+            $this->nutshellapi = new NutshellApi($username, $apikey);
+        }
+    }
+
+    public function callApi($call, $params)
+    {
+        if ($call && $params) {
+            return $this->nutshellapi->call($call, $params);
+        }
+        return false;
+    }
+
+    /**
+     * Find an account (company) by name
+     * @param string $name The name of the company
+     * @return int The company id, or false on none found
+     */
+    public function findAccount($name) {
+        
     }
 
     /**
@@ -47,7 +80,8 @@ class NutshellModx {
      * namespaced system setting; by default this value is null.
      * @return mixed The option value or the default value specified.
      */
-    public function getOption($key, $options = array(), $default = null) {
+    public function getOption($key, $options = array(), $default = null)
+    {
         $option = $default;
         if (!empty($key) && is_string($key)) {
             if ($options != null && array_key_exists($key, $options)) {

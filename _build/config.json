@@ -5,25 +5,22 @@
     "author": "Joeke Kloosterman",
     "version": "0.1.0",
     "package":{
-        
-
         "elements": {
-        
-            
-            
-            "snippets": [],
-            
-            
-        
-            
-            "chunks": [
-            
-            ]
-            
-        
+            "snippets": [{
+                "name": "NutshellModxHook",
+                "description": "FormIt hook to save the form data to Nutshell via the Nutshell API.",
+                "file": "nutshellmodxhook.snippet.php"
+            }],
+            "chunks": []
         },
-
-        "systemSettings": []
+        "systemSettings": [{
+            "key": "username",
+            "value": "",
+            "area": "general"
+        },{
+            "key": "apikey",
+            "value": "",
+            "area": "general"
+        }]
     }
-    
 }
