@@ -22,5 +22,9 @@
             "value": "",
             "area": "general"
         }]
-    }
+    },
+    "dependencies": [{
+        "name": "formit",        
+        "version": ">=2.2.0"
+    }]
 }

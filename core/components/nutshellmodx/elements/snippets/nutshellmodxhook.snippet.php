@@ -8,29 +8,38 @@ if (!($nutshellmodx instanceof NutshellModx)) {
     return;
 }
 
-// $values = $hook->getValues();
-// $formFields = $modx->getOption('NutshellFields', $formit->config, false);
-
-// $contactEmail = $values['email'];
-// $contactName = $values['name'];
-// $contactName = $values['company'];
-
-/* test */
-echo '<pre>';
-
-$nutshellFields = 'contact.email==email,contact.name==name,account.name==company';
+$formit =& $hook->formit;
+$values = $hook->getValues();
+$nutshellFields = $modx->getOption('nutshellFields', $formit->config, false);
 $formFields = array();
 $nutshellFields = explode(',', $nutshellFields);
+
+// If fields not configured, show error
+if (!count($nutshellFields)) {
+    $hook->hasErrors();
+    $modx->setPlaceholder('fi.validation_error', true);
+    $modx->setPlaceholder('fi.validation_error_message', $modx->lexicon('nutshellmodx.form.error.nofields'));
+    return false;
+}
 foreach ($nutshellFields as $nutshellFieldKey) {
     list($name, $key) = explode('==', $nutshellFieldKey);
     $formFields[trim($name)] = trim($key);
 }
 
-$values = [
-    'email' => 'joeke123@sterc.nl',
-    'name' => 'Joeke Kloosterman',
-    'company' => 'Testcompanyjoeke',
-];
+// No field configured for the contact email, show error
+if (!isset($values[$formFields['contact.email']])) {
+    $hook->hasErrors();
+    $modx->setPlaceholder('fi.validation_error', true);
+    $modx->setPlaceholder('fi.validation_error_message', $modx->lexicon('nutshellmodx.form.error.noemail'));
+    return false;
+}
+
+// Set default lead note to contact emailaddress
+// Check if note field is set in config, if so, and form value is not empty, use that
+$leadNote = $values[$formFields['contact.email']];
+if (isset($formFields['lead.note']) && isset($values[$formFields['lead.note']]) && !empty($values[$formFields['lead.note']])) {
+    $leadNote = $values[$formFields['lead.note']];
+}
 
 $findContact = $nutshellmodx->callApi('searchByEmail', ['emailAddressString' => $values[$formFields['contact.email']]]);
 
@@ -43,7 +52,7 @@ if (isset($findContact) && isset($findContact->contacts) && count($findContact->
         [
             'contact' => [
                 'email' => $values[$formFields['contact.email']],
-                'name' => $values[$formFields['contact.name']],
+                'name' => (isset($values[$formFields['contact.name']]) ? $values[$formFields['contact.name']] : $values[$formFields['contact.email']]),
             ]
         ]
     );
@@ -54,6 +63,7 @@ if (isset($findContact) && isset($findContact->contacts) && count($findContact->
 
 // Use the existing or newly created contactId
 if ($contactId) {
+    $accoundId = 0;
     $getContact = $nutshellmodx->callApi('getContact', ['contactId' => $contactId]);
     if ($getContact) {
         $rev = $getContact->rev;
@@ -117,12 +127,11 @@ if ($contactId) {
                     ]
                 ],
                 'note' => [
-                     'Joeketestnote voor lead',
+                     $leadNote
                  ]
             ]
         ]
     );
-    // print_r($getContact);
 }
 
 return true;
