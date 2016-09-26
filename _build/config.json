@@ -3,7 +3,7 @@
     "lowCaseName": "nutshellmodx",
     "description": "Nutshell integration for MODX FormIt",
     "author": "Joeke Kloosterman",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "package":{
         "elements": {
             "snippets": [{
@@ -26,5 +26,10 @@
     "dependencies": [{
         "name": "formit",        
         "version": ">=2.2.0"
-    }]
+    }],
+    "build": {
+        "readme": "docs/readme.txt",
+        "license": "docs/license.txt",
+        "changelog": "docs/changelog.txt"
+    }
 }
