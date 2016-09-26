@@ -1,5 +1,5 @@
 Changelog for NutshellModx.
 
-NutshellModx 0.0.1
+NutshellModx 0.1.1
 ==============
 - Initial release.
