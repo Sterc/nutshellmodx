@@ -75,7 +75,7 @@ if (!$contactId) {
 // Use the existing or newly created contactId
 if (isset($contactId)) {
     $accountId = 0;
-    $getContact = $nutshellmodx->callApi('getContact', ['contactId' => $contactId]);
+    $getContact = $nutshellmodx->callApi('getContact', array('contactId' => $contactId));
     if ($getContact) {
         $rev = $getContact->rev;
         /* Find the associated account (company) */
@@ -99,11 +99,11 @@ if (isset($contactId)) {
                         /* Attach the new account to the contact */
                         $nutshellmodx->callApi(
                             'editContact',
-                            [
+                            array(
                                 'contactId' => $contactId,
                                 'rev' => $rev,
-                                'contact' => [ 'accounts' => [[ 'id' => $accountId ]]]
-                            ]
+                                'contact' => array('accounts' => array(array('id' => $accountId)))
+                            )
                         );
                     }
                 }
@@ -113,13 +113,13 @@ if (isset($contactId)) {
     /* And finally, create the lead via the 'newLead' api call */
     $nutshellmodx->callApi(
         'newLead',
-        [
-            'lead' => [
-                'contacts' => [['id' => $contactId]],
-                'accounts' => ($accountId ? [[ 'id' => $accountId]] : false),
-                'note' => [$leadNote]
-            ]
-        ]
+        array(
+            'lead' => array(
+                'contacts' => array(array('id' => $contactId)),
+                'accounts' => ($accountId ? array(array('id' => $accountId)) : false),
+                'note' => array($leadNote)
+            )
+        )
     );
 }
 

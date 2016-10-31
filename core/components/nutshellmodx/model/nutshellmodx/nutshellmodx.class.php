@@ -68,7 +68,7 @@ class NutshellModx
 
     public function callApi($call, $params)
     {
-        if ($call && $params) {
+        if ($call && $params && $this->nutshellapi) {
             return $this->nutshellapi->call($call, $params);
         }
         return false;
@@ -82,7 +82,7 @@ class NutshellModx
     public function findContact($email)
     {
         $contactId = 0;
-        $findContact = $this->callApi('searchByEmail', ['emailAddressString' => $email]);
+        $findContact = $this->callApi('searchByEmail', array('emailAddressString' => $email));
         if (isset($findContact) && isset($findContact->contacts) && count($findContact->contacts)) {
             $contactId = $findContact->contacts[0]->id;
         }
@@ -100,12 +100,12 @@ class NutshellModx
         $contactId = 0;
         $createContact = $this->callApi(
             'newContact',
-            [
-                'contact' => [
+            array(
+                'contact' => array(
                     'email' => $email,
                     'name' => $name
-                ]
-            ]
+                )
+            )
         );
         if ($createContact && isset($createContact->id)) {
             $contactId = $createContact->id;
@@ -132,7 +132,7 @@ class NutshellModx
         $accountId = 0;
         $searchAccounts = $this->callApi(
             'searchAccounts',
-            ['string' => $name]
+            array('string' => $name)
         );
         if ($searchAccounts && count($searchAccounts)) {
             $accountId = $searchAccounts[0]->id;
@@ -150,11 +150,11 @@ class NutshellModx
         $accountId = 0;
         $createAccount = $this->callApi(
             'newAccount',
-            [
-                'account' => [
+            array(
+                'account' => array(
                     'name' => $name,
-                ]
-            ]
+                )
+            )
         );
         if ($createAccount && isset($createAccount->id)) {
             $accountId = $createAccount->id;
