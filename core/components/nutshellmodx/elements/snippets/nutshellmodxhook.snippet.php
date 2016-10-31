@@ -3,7 +3,16 @@
  * NutshellModx FormIt hook
  *
  */
-$nutshellmodx = $modx->getService('nutshellmodx', 'NutshellModx', $modx->getOption('nutshellmodx.core_path', null, $modx->getOption('core_path').'components/nutshellmodx/').'model/nutshellmodx/', array());
+$nutshellmodx = $modx->getService(
+    'nutshellmodx',
+    'NutshellModx',
+    $modx->getOption(
+        'nutshellmodx.core_path',
+        null,
+        $modx->getOption('core_path').'components/nutshellmodx/'
+    ).'model/nutshellmodx/',
+    array()
+);
 if (!($nutshellmodx instanceof NutshellModx)) {
     return;
 }
@@ -37,7 +46,9 @@ if (!isset($values[$formFields['contact.email']])) {
 // Set default lead note to contact emailaddress
 // Check if note field is set in config, if so, and form value is not empty, use that
 $leadNote = $values[$formFields['contact.email']];
-if (isset($formFields['lead.note']) && isset($values[$formFields['lead.note']]) && !empty($values[$formFields['lead.note']])) {
+if (isset($formFields['lead.note'])
+    && isset($values[$formFields['lead.note']])
+    && !empty($values[$formFields['lead.note']])) {
     $leadNote = $values[$formFields['lead.note']];
 }
 
@@ -47,12 +58,16 @@ $findContact = $nutshellmodx->callApi('searchByEmail', ['emailAddressString' => 
 if (isset($findContact) && isset($findContact->contacts) && count($findContact->contacts)) {
     $contactId = $findContact->contacts[0]->id;
 } else {
+    $contactName = $values[$formFields['contact.email']];
+    if (isset($values[$formFields['contact.name']])) {
+        $contactName = $values[$formFields['contact.name']];
+    }
     $createContact = $nutshellmodx->callApi(
         'newContact',
         [
             'contact' => [
                 'email' => $values[$formFields['contact.email']],
-                'name' => (isset($values[$formFields['contact.name']]) ? $values[$formFields['contact.name']] : $values[$formFields['contact.email']]),
+                'name' => $contactName
             ]
         ]
     );
@@ -62,7 +77,7 @@ if (isset($findContact) && isset($findContact->contacts) && count($findContact->
 }
 
 // Use the existing or newly created contactId
-if ($contactId) {
+if (isset($contactId)) {
     $accoundId = 0;
     $getContact = $nutshellmodx->callApi('getContact', ['contactId' => $contactId]);
     if ($getContact) {
@@ -75,7 +90,10 @@ if ($contactId) {
             // If account name is set, try to find the company via the API
             // When not found, create new company account
             if ($values[$formFields['account.name']] && !empty($values[$formFields['account.name']])) {
-                $searchAccounts = $nutshellmodx->callApi('searchAccounts', ['string' => $values[$formFields['account.name']]]);
+                $searchAccounts = $nutshellmodx->callApi(
+                    'searchAccounts',
+                    ['string' => $values[$formFields['account.name']]]
+                );
                 if ($searchAccounts && count($searchAccounts)) {
                     $accountId = $searchAccounts[0]->id;
                 } else {
