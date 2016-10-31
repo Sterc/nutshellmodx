@@ -18,9 +18,21 @@ class NutshellModx
         $this->modx =& $modx;
         $this->namespace = $this->getOption('namespace', $options, 'nutshellmodx');
 
-        $corePath = $this->getOption('core_path', $options, $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/nutshellmodx/');
-        $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/nutshellmodx/');
-        $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/nutshellmodx/');
+        $corePath = $this->getOption(
+            'core_path',
+            $options,
+            $this->modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/nutshellmodx/'
+        );
+        $assetsPath = $this->getOption(
+            'assets_path',
+            $options,
+            $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/nutshellmodx/'
+        );
+        $assetsUrl = $this->getOption(
+            'assets_url',
+            $options,
+            $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/nutshellmodx/'
+        );
 
         /* loads some default paths for easier management */
         $this->options = array_merge(array(
@@ -63,12 +75,104 @@ class NutshellModx
     }
 
     /**
+     * Find a contact (people) by email address
+     * @param string $email The email address of the contact
+     * @return int The contact id, or 0 on none found
+     */
+    public function findContact($email)
+    {
+        $contactId = 0;
+        $findContact = $this->callApi('searchByEmail', ['emailAddressString' => $email]);
+        if (isset($findContact) && isset($findContact->contacts) && count($findContact->contacts)) {
+            $contactId = $findContact->contacts[0]->id;
+        }
+        return $contactId;
+    }
+
+    /**
+     * Creates a new contact in Nutshell.
+     * @param string $email The contact email address
+     * @param string $name
+     * @return int The contactId of the newly created contact, 0 on none
+     */
+    public function createContact($email, $name)
+    {
+        $contactId = 0;
+        $createContact = $this->callApi(
+            'newContact',
+            [
+                'contact' => [
+                    'email' => $email,
+                    'name' => $name
+                ]
+            ]
+        );
+        if ($createContact && isset($createContact->id)) {
+            $contactId = $createContact->id;
+        }
+        return $contactId;
+    }
+
+    /**
+     * Grabs the system setting to determine whether or not the API should try to match an existing contact
+     * @return int  The integer value from the system setting
+     */
+    public function shouldUseExistingContact()
+    {
+        return (int) $this->modx->getOption('nutshellmodx.use_existing_contact');
+    }
+
+    /**
      * Find an account (company) by name
      * @param string $name The name of the company
      * @return int The company id, or false on none found
      */
-    public function findAccount($name) {
-        
+    public function findAccount($name)
+    {
+        $accountId = 0;
+        $searchAccounts = $this->callApi(
+            'searchAccounts',
+            ['string' => $name]
+        );
+        if ($searchAccounts && count($searchAccounts)) {
+            $accountId = $searchAccounts[0]->id;
+        }
+        return $accountId;
+    }
+
+    /**
+     * Creates an account (= company) in Nutshell
+     * @param   string $name The company name
+     * @return  int The accountId of the newly created account
+     */
+    public function createAccount($name)
+    {
+        $accountId = 0;
+        $createAccount = $this->callApi(
+            'newAccount',
+            [
+                'account' => [
+                    'name' => $name,
+                ]
+            ]
+        );
+        if ($createAccount && isset($createAccount->id)) {
+            $accountId = $createAccount->id;
+        }
+        return $accountId;
+    }
+    /**
+     * Should an account (= company) be created when creating the contact and lead.
+     * ---
+     * ---
+     * NOTE: Disabled for now, could be implemented in the future via a system setting.
+     * ---
+     * ---
+     * @return bool
+     */
+    public function shouldCreateAccount()
+    {
+        return false;
     }
 
     /**

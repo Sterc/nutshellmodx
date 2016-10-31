@@ -23,7 +23,7 @@ $nutshellFields = $modx->getOption('nutshellFields', $formit->config, false);
 $formFields = array();
 $nutshellFields = explode(',', $nutshellFields);
 
-// If fields not configured, show error
+/* If fields not configured, show error */
 if (!count($nutshellFields)) {
     $hook->hasErrors();
     $modx->setPlaceholder('fi.validation_error', true);
@@ -35,7 +35,7 @@ foreach ($nutshellFields as $nutshellFieldKey) {
     $formFields[trim($name)] = trim($key);
 }
 
-// No field configured for the contact email, show error
+/* No field configured for the contact email, show error */
 if (!isset($values[$formFields['contact.email']])) {
     $hook->hasErrors();
     $modx->setPlaceholder('fi.validation_error', true);
@@ -43,8 +43,10 @@ if (!isset($values[$formFields['contact.email']])) {
     return false;
 }
 
-// Set default lead note to contact emailaddress
-// Check if note field is set in config, if so, and form value is not empty, use that
+/**
+ * Set default lead note to contact emailaddress
+ * Check if note field is set in config, if so, and form value is not empty, use that
+ */
 $leadNote = $values[$formFields['contact.email']];
 if (isset($formFields['lead.note'])
     && isset($values[$formFields['lead.note']])
@@ -52,101 +54,70 @@ if (isset($formFields['lead.note'])
     $leadNote = $values[$formFields['lead.note']];
 }
 
-$findContact = $nutshellmodx->callApi('searchByEmail', ['emailAddressString' => $values[$formFields['contact.email']]]);
-
-// Check if contact already exists.. if not create new one
-if (isset($findContact) && isset($findContact->contacts) && count($findContact->contacts)) {
-    $contactId = $findContact->contacts[0]->id;
+/* Check if API should try to match an existing contact, or create a new one */
+if ($nutshellmodx->shouldUseExistingContact()) {
+    /* Try to find an existing contact, if none found, $contactId returns false */
+    $contactId = $nutshellmodx->findContact($values[$formFields['contact.email']]);
 } else {
+    $contactId = false;
+}
+
+/* If no contactId, create new contact. */
+if (!$contactId) {
+    /* By default, use the emailaddress for the contact name, if a name is set in the form, use that */
     $contactName = $values[$formFields['contact.email']];
     if (isset($values[$formFields['contact.name']])) {
         $contactName = $values[$formFields['contact.name']];
     }
-    $createContact = $nutshellmodx->callApi(
-        'newContact',
-        [
-            'contact' => [
-                'email' => $values[$formFields['contact.email']],
-                'name' => $contactName
-            ]
-        ]
-    );
-    if ($createContact && isset($createContact->id)) {
-        $contactId = $createContact->id;
-    }
+    $contactId = $nutshellmodx->createContact($values[$formFields['contact.email']], $contactName);
 }
 
 // Use the existing or newly created contactId
 if (isset($contactId)) {
-    $accoundId = 0;
+    $accountId = 0;
     $getContact = $nutshellmodx->callApi('getContact', ['contactId' => $contactId]);
     if ($getContact) {
         $rev = $getContact->rev;
-        // Find the associated account (company)
+        /* Find the associated account (company) */
         if (isset($getContact->accounts) && count($getContact->accounts)) {
             $accountId = $getContact->accounts[0]->id;
         } else {
-            // No account (company) is attached to this user
-            // If account name is set, try to find the company via the API
-            // When not found, create new company account
-            if ($values[$formFields['account.name']] && !empty($values[$formFields['account.name']])) {
-                $searchAccounts = $nutshellmodx->callApi(
-                    'searchAccounts',
-                    ['string' => $values[$formFields['account.name']]]
-                );
-                if ($searchAccounts && count($searchAccounts)) {
-                    $accountId = $searchAccounts[0]->id;
-                } else {
-                    $createAccount = $nutshellmodx->callApi(
-                        'newAccount',
-                        [
-                            'account' => [
-                                'name' => $values[$formFields['account.name']],
-                            ]
-                        ]
-                    );
-                    if ($createAccount && isset($createAccount->id)) {
-                        $accountId = $createAccount->id;
+            /**
+             * No account (company) is attached to this user
+             * First check if we should create an account or not
+             * If account name is set, try to find the company via the API
+             * When not found, create new company account
+             */
+            if ($nutshellmodx->shouldCreateAccount()) {
+                if ($values[$formFields['account.name']] && !empty($values[$formFields['account.name']])) {
+                    /* First try to match existing */
+                    $accountId = $nutshellmodx->findAccount($values[$formFields['account.name']]);
+                    if (!$accountId) {
+                        $accountId = $nutshellmodx->createAccount($values[$formFields['account.name']]);
                     }
-                }
-                if ($accountId) {
-                    // Attach the new account to the contact
-                    $editContact = $nutshellmodx->callApi(
-                        'editContact',
-                        [
-                            'contactId' => $contactId,
-                            'rev' => $rev,
-                            'contact' => [
-                                'accounts' => [
-                                    [
-                                        'id' => $accountId
-                                    ]
-                                ],
+                    if ($accountId) {
+                        /* Attach the new account to the contact */
+                        $nutshellmodx->callApi(
+                            'editContact',
+                            [
+                                'contactId' => $contactId,
+                                'rev' => $rev,
+                                'contact' => [ 'accounts' => [[ 'id' => $accountId ]]]
                             ]
-                        ]
-                    );
+                        );
+                    }
                 }
             }
         }
     }
-    // Create the lead via the 'newLead' api call
-    $createLead = $nutshellmodx->callApi(
+    /* And finally, create the lead via the 'newLead' api call */
+    $nutshellmodx->callApi(
         'newLead',
         [
             'lead' => [
-                'contacts' => [
-                    [
-                        'id' => $contactId
-                    ]
-                ],
-                'accounts' => [
-                    [
-                        'id' => $accountId
-                    ]
-                ],
-                'note' => [
-                     $leadNote
-                 ]
+                'contacts' => [['id' => $contactId]],
+                'accounts' => ($accountId ? [[ 'id' => $accountId]] : false),
+                'note' => [$leadNote]
             ]
         ]
     );
