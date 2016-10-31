@@ -1,7 +1,7 @@
 ---------------------------------------
 NutshellModx
 ---------------------------------------
-Version: 0.1.1
+Version: 0.1.3
 Author: Sterc <modx@sterc.nl>
 ---------------------------------------
 
@@ -13,7 +13,7 @@ Via the `nutshellFields` FormIt parameter you can configure which fields to use 
 Features
 ---------------------------------------
 - Checks for existing People and Companies, based on form fields
-- Automatically adds a new Nutshell contact (People), using emailaddress and name from your FormIt form.
+- Automatically adds a new Nutshell contact (People), using email address and name from your FormIt form.
 - Adds a new Company and attaches it to the contact.
 - Creates a lead with a lead note based on your form fields.
 

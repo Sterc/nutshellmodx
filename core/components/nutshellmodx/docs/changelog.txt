@@ -1,5 +1,15 @@
 Changelog for NutshellModx.
 
+NutshellModx 0.1.3
+==============
+- Fix PHP short-array notations to long-array notations to support php 5.3
+- Add check for valid nutshellapi instance when requesting callAPI
+
+NutshellModx 0.1.2
+==============
+- Add system setting for matching on contact
+- Disable creating new company
+
 NutshellModx 0.1.1
 ==============
 - Initial release.
