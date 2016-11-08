@@ -19,6 +19,17 @@ if (!($nutshellmodx instanceof NutshellModx)) {
 
 $formit =& $hook->formit;
 $values = $hook->getValues();
+
+/**
+ * Get the Nutshell username and apikey from formit config.
+ * If not set, username and apikey from system settings are used.
+ */
+$nutshellUsername = $modx->getOption('nutshellUsername', $formit->config, false);
+$nutshellApikey= $modx->getOption('nutshellApikey', $formit->config, false);
+
+/* Load the Nutshell API */
+$nutshellmodx->loadApi($nutshellUsername, $nutshellApikey);
+
 $nutshellFields = $modx->getOption('nutshellFields', $formit->config, false);
 $formFields = array();
 $nutshellFields = explode(',', $nutshellFields);

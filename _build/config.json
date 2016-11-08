@@ -3,7 +3,7 @@
     "lowCaseName": "nutshellmodx",
     "description": "Nutshell integration for MODX FormIt",
     "author": "Joeke Kloosterman",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "package":{
         "elements": {
             "snippets": [{

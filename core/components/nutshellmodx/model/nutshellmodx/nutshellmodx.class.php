@@ -51,18 +51,28 @@ class NutshellModx
 
         $this->modx->addPackage('nutshellmodx', $this->getOption('modelPath'));
         $this->modx->lexicon->load('nutshellmodx:default');
-
-        /* Load the Nutshell API */
-        $this->loadApi();
     }
 
-    public function loadApi()
+    /**
+     * @param string $username The Nutshell username
+     * @param string $apikey The Nutshell API key
+     */
+    public function loadApi($username = '', $apikey = '')
     {
         require_once($this->options['modelPath'].'nutshellapi/NutshellApi.php');
-        $username = $this->modx->getOption('nutshellmodx.username');
-        $apikey = $this->modx->getOption('nutshellmodx.apikey');
+        if (!$username) {
+            $username = $this->modx->getOption('nutshellmodx.username');
+        }
+        if (!$apikey) {
+            $apikey = $this->modx->getOption('nutshellmodx.apikey');
+        }
         if ($username && $apikey) {
             $this->nutshellapi = new NutshellApi($username, $apikey);
+        } else {
+            $this->modx->log(
+                modX::LOG_LEVEL_ERROR,
+                '[NutshellModx] ' . $this->modx->lexicon('nutshellmodx.error.no_username_apikey')
+            );
         }
     }
 

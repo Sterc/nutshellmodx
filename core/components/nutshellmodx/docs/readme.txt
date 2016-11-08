@@ -20,10 +20,16 @@ Features
 
 Configuration
 ---------------------------------------
-To use the NutshellModx hook, you have to supply a username and API key. This can be configured with the system settings:
+To use the NutshellModx hook, you have to supply a username and API key. This can be configured with either system settings or formit parameters:
 
+* System settings
 nutshellmodx.apikey
 nutshellmodx.username
+
+* FormIt parameters
+nutshellUsername (optional, defaults to system setting)
+nutshellApikey (optional, defaults to system setting)
+nutshellFields (required)
 
 The API key can be generated in your Nutshell environment: go to Setup > Third party > API keys.
 The configuration of the form fields can be done via the `nutshellFields` FormIt parameter. See below for an example.
@@ -40,4 +46,5 @@ Example
 &validate=`email:email:required`
 ]]
 
-The nutshellFields parameter has minimum requirement of `contact.email==emailformfield` where `emailformfield` is the name of the form field where the user enters their emailaddress.
+The second value in every &nutshellFields parameter (after the ==) is the name of the form field that holds the corresponding value.
+The &nutshellFields parameter has minimum requirement of `contact.email==youremailfield` where `youremailfield` is the emailaddress for the Nutshell contact.
