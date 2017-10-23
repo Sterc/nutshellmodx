@@ -3,7 +3,7 @@
     "lowCaseName": "nutshellmodx",
     "description": "Nutshell integration for MODX FormIt",
     "author": "Joeke Kloosterman",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "package":{
         "elements": {
             "snippets": [{
@@ -25,6 +25,11 @@
             "key": "use_existing_contact",
             "type": "combo-boolean",
             "value": "0",
+            "area": "general"
+        },{
+            "key": "create_account",
+            "type": "combo-boolean",
+            "value": "1",
             "area": "general"
         }]
     },

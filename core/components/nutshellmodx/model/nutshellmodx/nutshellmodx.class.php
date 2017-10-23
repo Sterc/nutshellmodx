@@ -173,16 +173,11 @@ class NutshellModx
     }
     /**
      * Should an account (= company) be created when creating the contact and lead.
-     * ---
-     * ---
-     * NOTE: Disabled for now, could be implemented in the future via a system setting.
-     * ---
-     * ---
      * @return bool
      */
     public function shouldCreateAccount()
     {
-        return false;
+        return (int) $this->modx->getOption('nutshellmodx.create_account');
     }
 
     /**

@@ -1,12 +1,12 @@
 ---------------------------------------
-NutshellModx
+MODX to Nutshell CRM
 ---------------------------------------
-Version: 0.1.3
+Version: 0.1.5
 Author: Sterc <modx@sterc.nl>
 ---------------------------------------
 
-Now you can easily integrate your MODX FormIt forms with Nutshell, via the NutshellModx extra.
-Using the Nutshell API, the NutshellModx extra adds a custom hook you can add to your FormIt forms.
+Now you can easily integrate your MODX FormIt forms with Nutshell, via the MODX to Nutshell CRM extra.
+Using the Nutshell API, the MODX to Nutshell CRM extra adds a custom hook you can add to your FormIt forms.
 Via the `nutshellFields` FormIt parameter you can configure which fields to use for the Nutshell data.
 
 
@@ -20,7 +20,7 @@ Features
 
 Configuration
 ---------------------------------------
-To use the NutshellModx hook, you have to supply a username and API key. This can be configured with either system settings or formit parameters:
+To use the MODX to Nutshell CRM hook, you have to supply a username and API key. This can be configured with either system settings or formit parameters:
 
 * System settings
 nutshellmodx.apikey

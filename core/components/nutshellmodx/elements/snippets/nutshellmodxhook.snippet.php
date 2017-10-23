@@ -1,6 +1,6 @@
 <?php
 /**
- * NutshellModx FormIt hook
+ * MODX to Nutshell CRM FormIt hook
  *
  */
 $nutshellmodx = $modx->getService(
@@ -101,13 +101,13 @@ if (isset($contactId)) {
              */
             if ($nutshellmodx->shouldCreateAccount()) {
                 if ($values[$formFields['account.name']] && !empty($values[$formFields['account.name']])) {
-                    /* First try to match existing */
+                    /* First try to match existing contact */
                     $accountId = $nutshellmodx->findAccount($values[$formFields['account.name']]);
                     if (!$accountId) {
                         $accountId = $nutshellmodx->createAccount($values[$formFields['account.name']]);
                     }
+                    /* Attach the new account (company) to the contact */
                     if ($accountId) {
-                        /* Attach the new account to the contact */
                         $nutshellmodx->callApi(
                             'editContact',
                             array(
