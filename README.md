@@ -18,8 +18,10 @@ Via the `nutshellFields` FormIt parameter you can configure which fields to use 
 To use the MODX to Nutshell CRM hook, you have to supply a username and API key. This can be configured with either system settings or formit parameters:
 
 ### System settings ###
-`nutshellmodx.apikey`
-`nutshellmodx.username`
+- `nutshellmodx.apikey`
+- `nutshellmodx.username`
+- `nutshellmodx.use_existing_contact`
+- `nutshellmodx.create_account`
 
 ### FormIt parameters ###
 `nutshellUsername` (optional, defaults to system setting)
