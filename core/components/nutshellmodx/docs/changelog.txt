@@ -1,5 +1,9 @@
 Changelog for MODX to Nutshell CRM.
 
+MODX to Nutshell CRM 0.1.6
+==============
+- Add exact matching for account (company) name
+
 MODX to Nutshell CRM 0.1.5
 ==============
 - Added setting for using nutshell company and attach it to lead note

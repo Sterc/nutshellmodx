@@ -81,7 +81,6 @@ class NutshellModx
         if ($call && $params && $this->nutshellapi) {
             return $this->nutshellapi->call($call, $params);
         }
-        return false;
     }
 
     /**
@@ -134,6 +133,7 @@ class NutshellModx
 
     /**
      * Find an account (company) by name
+     * When an exact match is found
      * @param string $name The name of the company
      * @return int The company id, or false on none found
      */
@@ -145,7 +145,13 @@ class NutshellModx
             array('string' => $name)
         );
         if ($searchAccounts && count($searchAccounts)) {
-            $accountId = $searchAccounts[0]->id;
+            $name = strtolower($name);
+            foreach ($searchAccounts as $account) {
+                if (strtolower($account->name) == $name) {
+                    $accountId = $account->id;
+                    break;
+                }
+            }
         }
         return $accountId;
     }
