@@ -31,14 +31,13 @@ The configuration of the form fields can be done via the `nutshellFields` FormIt
 
 
 ## Example ##
-```[[!FormIt?
+```
+[[!FormIt?
 &hooks=`NutshellModxHook`
-&nutshellFields=`contact.email==email,
-    contact.name==name,
-    account.name==company,
-    lead.note==message`
+&nutshellFields=`contact.email==email,contact.name==name,account.name==company,lead.note==message`
 &validate=`email:email:required`
-]]```
+]]
+```
 
 The second value in every &nutshellFields parameter (after the ==) is the name of the form field that holds the corresponding value.
 The &nutshellFields parameter has minimum requirement of `contact.email==youremailfield` where `youremailfield` is the emailaddress for the Nutshell contact.
