@@ -1,9 +1,9 @@
 {
     "name": "NutshellModx",
     "lowCaseName": "nutshellmodx",
-    "description": "Nutshell integration for MODX FormIt",
+    "description": "MODX to Nutshell CRM - Nutshell integration for FormIt",
     "author": "Joeke Kloosterman",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "package":{
         "elements": {
             "snippets": [{
@@ -34,12 +34,21 @@
         }]
     },
     "dependencies": [{
-        "name": "formit",        
+        "name": "formit",
         "version": ">=2.2.0"
     }],
     "build": {
         "readme": "docs/readme.txt",
         "license": "docs/license.txt",
-        "changelog": "docs/changelog.txt"
+        "changelog": "docs/changelog.txt",
+        "resolver": {
+            "after": [
+                "setupoptions.resolver.php",
+                "stercextra.resolver.php"
+            ]
+        },
+        "setupOptions":{
+            "source": "setup.options.php"
+        }
     }
 }
