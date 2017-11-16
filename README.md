@@ -1,5 +1,5 @@
 # MODX to Nutshell CRM #
-_Version: 0.1.6_
+_Version: 1.0.0_
 
 Now you can easily integrate your MODX FormIt forms with Nutshell, via the MODX to Nutshell CRM extra.
 Using the Nutshell API, the MODX to Nutshell CRM extra adds a custom hook you can add to your FormIt forms

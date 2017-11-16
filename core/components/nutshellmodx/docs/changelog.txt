@@ -1,5 +1,9 @@
 Changelog for MODX to Nutshell CRM.
 
+MODX to Nutshell CRM 1.0.0
+==============
+- First public release
+
 MODX to Nutshell CRM 0.1.7
 ==============
 - Add StercExtra resolver + setup options
