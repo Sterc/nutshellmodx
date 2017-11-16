@@ -1,5 +1,9 @@
 Changelog for MODX to Nutshell CRM.
 
+MODX to Nutshell CRM 0.1.7
+==============
+- Add StercExtra resolver + setup options
+
 MODX to Nutshell CRM 0.1.6
 ==============
 - Add exact matching for account (company) name
