@@ -1,29 +1,54 @@
 {
     "name": "NutshellModx",
     "lowCaseName": "nutshellmodx",
-    "description": "Nutshell integration for MODX FormIt",
+    "description": "MODX to Nutshell CRM - Nutshell integration for FormIt",
     "author": "Joeke Kloosterman",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "package":{
-        
-
         "elements": {
-        
-            
-            
-            "snippets": [],
-            
-            
-        
-            
-            "chunks": [
-            
-            ]
-            
-        
+            "snippets": [{
+                "name": "NutshellModxHook",
+                "description": "FormIt hook to save the form data to Nutshell via the Nutshell API.",
+                "file": "nutshellmodxhook.snippet.php"
+            }],
+            "chunks": []
         },
-
-        "systemSettings": []
+        "systemSettings": [{
+            "key": "username",
+            "value": "",
+            "area": "general"
+        },{
+            "key": "apikey",
+            "value": "",
+            "area": "general"
+        },{
+            "key": "use_existing_contact",
+            "type": "combo-boolean",
+            "value": "0",
+            "area": "general"
+        },{
+            "key": "create_account",
+            "type": "combo-boolean",
+            "value": "1",
+            "area": "general"
+        }]
+    },
+    "dependencies": [{
+        "name": "formit",
+        "version": ">=2.2.0"
+    }],
+    "build": {
+        "readme": "docs/readme.txt",
+        "license": "docs/license.txt",
+        "changelog": "docs/changelog.txt",
+        "resolver": {
+            "after": [
+                "setupoptions.resolver.php",
+                "stercextra.resolver.php"
+            ]
+        },
+        "setupOptions":{
+            "source": "setup.options.php"
+        }
     }
-    
 }
