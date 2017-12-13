@@ -1,6 +1,6 @@
 Changelog for MODX to Nutshell CRM.
 
-MODX to Nutshell CRM 1.0.0
+MODX to Nutshell CRM 1.0.0-pl
 ==============
 - First public release
 
