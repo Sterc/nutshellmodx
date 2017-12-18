@@ -43,7 +43,7 @@ $output[] = '
 </style>
 
 <script>
-    var setupTitle = "MODX to Nutshell CRM installation - a MODX Extra by Sterc";
+    var setupTitle = "' . $package . ' installation - a MODX Extra by Sterc";
     document.getElementsByClassName("x-window-header-text")[0].innerHTML = setupTitle;
 </script>
 

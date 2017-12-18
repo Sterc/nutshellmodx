@@ -2,8 +2,8 @@
     "name": "NutshellModx",
     "lowCaseName": "nutshellmodx",
     "description": "MODX to Nutshell CRM - Nutshell integration for FormIt",
-    "author": "Joeke Kloosterman",
-    "version": "1.0.0",
+    "author": "Sterc",
+    "version": "1.0.0-pl",
     "package":{
         "elements": {
             "snippets": [{
