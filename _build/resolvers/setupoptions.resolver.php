@@ -25,18 +25,9 @@ switch ($options[xPDOTransport::PACKAGE_ACTION]) {
                 if ($settingObject) {
                     $settingObject->set('value', $options[$key]);
                     $settingObject->save();
-                } else {
-                    $error = '[' . $package . '] ' . strtolower($package) . '.' . $key . ' setting could not be found,';
-                    $error .= ' so the setting could not be changed.';
-
-                    $object->xpdo->log(
-                        xPDO::LOG_LEVEL_ERROR,
-                        $error
-                    );
                 }
             }
         }
-
         $success = true;
         break;
     case xPDOTransport::ACTION_UNINSTALL:
